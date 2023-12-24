@@ -11,8 +11,8 @@ import './Home.css';
 const Home = () => {
     return (
         <div className="home">
-            {Navbar}
-            {<Navbar /> }
+            {/* Navbar or Header */}
+            {/* <Navbar /> */}
 
             {/* Hero Section */}
             <section className="hero-section">
@@ -58,8 +58,8 @@ const Home = () => {
                 <BlogOverviewComponent />
             </section> */}
 
-            {Footer}
-            { <Footer /> }
+            {/* Footer */}
+            {/* <Footer /> */}
         </div>
     );
 };
