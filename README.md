@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# InfoSec
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The start of a React article site, branded InfoSec in the navbar: sign-in and registration forms, an infinite-scroll article feed and a most-viewed sidebar.
 
-## Available Scripts
+## Context
 
-In the project directory, you can run:
+I set this up over December 23-24, 2023, got as far as the component outline and routing, and stopped. None of the pieces are connected to data.
 
-### `npm start`
+## Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React 18.2, react-router-dom 6.21, react-infinite-scroll-component 6.1
+- Create React App, with `react-scripts` pinned back to `^3.0.1` (webpack 4); it was 5.0.1 when generated
+- Bootstrap 5.3 is installed but not imported
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Running it
 
-### `npm test`
+```
+npm ci
+NODE_OPTIONS=--openssl-legacy-provider npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The OpenSSL flag is needed on Node 17 and later because of the webpack 4 toolchain. It compiles on Node 22 (checked October 2026), but the page is blank because of the routing issue below.
 
-### `npm run build`
+## Status
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Unfinished skeleton, archived.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Known gaps
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `src/App.js` lines 14-16 use the react-router v5 `component=` prop inside v6 `<Routes>`. v6 expects `element={<Home />}`, so every route renders nothing.
+- `react-scripts` was downgraded from 5.0.1 to `^3.0.1` in commit `731508d`, which pairs React 18 with a 2019 build toolchain.
+- `src/pages/Home.js` renders `<Navbar />` twice (lines 11 and 16); the second one replaced a Footer. `Navbar` links to `/about`, which has no route.
+- `src/components/Articles.js` and `MostViewed.js` "fetch" empty arrays after a timeout; there is no API or data source. `Articles.js` also has a missing `useEffect` dependency (line 24).
+- `src/components/SignIn.js` line 23 and `Register.js` line 28 log the plaintext password to the console. There is no backend, validation or error handling.
+- `ArticleForm`, `Common/Button` and `Common/Modal` aren't used anywhere.
+- `src/pages/Home.css`: `flex: 2/3` and `flex: 1/3` aren't valid, and the `.Articles`/`.MostViewed` classes aren't on any element.
+- `src/App.test.js` is the default CRA test and fails. The page title is still "React App".
+- A `.history/` folder of editor snapshots was committed; it is untracked now but remains in the history.
+- `npm audit` reports a couple of hundred advisories in this dependency tree.
 
-### `npm run eject`
+## What I'd do differently now
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Keep the generated `react-scripts` version (or use Vite) instead of downgrading the toolchain to get past an error.
+- Get one route rendering real data before outlining the rest.
+- Never log credentials, even in placeholder handlers.
